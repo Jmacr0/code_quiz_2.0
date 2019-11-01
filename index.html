@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="./style.css">
     <title>Code Quiz</title>
 </head>
 
@@ -14,7 +15,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-6 mr-auto">
-                <div id="high-scores">high-scores</div>
+                <div id="high-scores">High-Scores</div>
                 <div id="return">Return</div>
             </div>
 
@@ -24,31 +25,46 @@
         </div>
     </div>
 
-    <div class="container" id="main">
-        <div class="row col-md-7 mx-auto" id="question">
-            <h2></h2>
-        </div>
-        <div class="row" id="options">
-            <ul class="mx-auto">
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-            </ul>
-        </div>
-    </div>
+    <div class="container-fluid" id="main">
+        <div class="row">
+            <div class="col" id="question">
+                <h2 class="text-center"></h2>
+            </div>
 
-    <div class="container">
-        <div class="row text-center">
-            <button class="col-md-6 btn btn-primary mx-auto" id="start-button">Start</button>
-            <button class="col-md-6 btn btn-secondary mx-auto" id="submit-button">Submit</button>
+        </div>
+        <div class="row">
+            <div class="col-sm-7 mx-auto" id="options">
+                <ul class="text-center">
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                </ul>
+            </div>
         </div>
     </div>
 
     <div class="container">
         <div class="row">
-            <div class="col-md-7 text-center mx-auto" id="score"></div>
-            <div class="col-md-7 text-center mx-auto" id="message"></div>
+            <div class="col-md-7 text-center mx-auto">
+                <div class="col-sm-7 text-center mx-auto" id="score"><span id="score-span"></span></div>
+                <input class="col-sm-7 text-center mx-auto mt-3" type="text" maxlength="3" placeholder="AAA"
+                    id="username">
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid mt-3">
+        <div class="row text-center">
+            <button class="col-sm-6 btn btn-primary py-3 mx-auto" id="start-button">Start</button>
+            <button class="col-sm-6 btn btn-secondary py-3 mx-auto" id="submit-button">Submit</button>
+        </div>
+    </div>
+
+    <div class="container mt-3">
+        <div class="row">
+            <div class="col-md-7 text-center mx-auto alert-success" id="correct">Correct!</div>
+            <div class="col-md-7 text-center mx-auto alert-danger" id="wrong">Wrong!</div>
         </div>
     </div>
 

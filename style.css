@@ -1,0 +1,35 @@
+#high-scores, #return, #display-time, #main, #start-button, #submit-button, #correct, #wrong, #score, #username {
+    display: none;
+}
+
+#high-scores, #return {
+    cursor: pointer;
+ }
+ 
+ #high-scores:hover, #return:hover {
+    color: rgb(46, 36, 185);
+    transition-duration: 0.4s;
+ }
+ 
+ h2 {
+    font-size: 1.5em;
+ }
+ 
+ ul {
+    list-style: none; 
+    padding-left: 0;
+ }
+ 
+ ul li {
+      cursor: pointer; 
+      background-color: purple;
+      color: white;
+      margin: 10px;
+      padding-top: 5px;
+      padding-bottom: 5px;
+ }
+ 
+
+ #correct, #wrong, #score {
+    font-size: 2em;
+ }

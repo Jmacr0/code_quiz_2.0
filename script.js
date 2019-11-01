@@ -4,30 +4,38 @@ var displayTime = $('#display-time')
 var main = $('#main')
 var startButton = $('#start-button')
 var submitButton = $('#submit-button')
-var message = $('#message')
+var correct = $('#correct')
+var wrong = $('#wrong')
 var score = $('#score')
+var scoreSpan = $('#score-span')
+var username = $('#username')
 var question = document.querySelector('#question').children[0]
 var options = document.querySelector('#options').children[0]
 
-//on document load call start quiz
+var user = {
+    player: $.trim(username.val()),
+    playerScore: parseInt(scoreSpan.html()),
 
-$(document).ready(function () {
-    displayReset();
-    startQuiz();
-    startButton.on('click', timer.start);
-});
+};
+
+//on document load call start quiz
+startQuiz();
+
+
 
 function displayReset() {
     //reset all displays
     console.log('display reset')
-    highScores.attr('style', 'display: none');
-    backButton.attr('style', 'display: none');
-    displayTime.attr('style', 'display: none');
-    main.attr('style', 'display: none');
-    startButton.attr('style', 'display: none');
-    submitButton.attr('style', 'display: none');
-    message.attr('style', 'display: none')
-    score.attr('style', 'display: none')
+    highScores.hide();
+    backButton.hide();
+    displayTime.hide();
+    main.hide();
+    startButton.hide();
+    submitButton.hide();
+    correct.hide()
+    wrong.hide()
+    score.hide()
+    username.hide()
 }
 
 function startQuiz() {
@@ -35,9 +43,9 @@ function startQuiz() {
     questionSelector = 0;
     //display start quiz button
     console.log('start quiz')
-    startButton.attr('style', 'display: block')
+    startButton.show();
     //display highscores tab
-    highScores.attr('style', 'display: block')
+    highScores.show();
 }
 
 var questionSelector = 0;
@@ -75,9 +83,9 @@ var timer = {
     start: function () {
         clearInterval(counter)
         timer.time = questions.length * 10;
-        displayTime.attr('style', 'display: block');
+        displayTime.show()
         displayTime.html(timer.time)
-        startButton.attr('style', 'display: none');
+        startButton.hide();
         displayQuestions();
         counter = setInterval(timer.count, 1000);
     },
@@ -90,7 +98,7 @@ var timer = {
             timer.time = 0;
             displayTime.html(timer.time);
             finalScore();
-        }  else {
+        } else {
             displayQuestions();
         }
     },
@@ -105,18 +113,10 @@ var timer = {
     //clear interval when no more questions
 }
 
-
-
-function endCheck() {
-    //if time over
-    console.log('hi')
-
-    //if all questions asked
-}
-
+startButton.on('click', timer.start);
 
 function displayQuestions() {
-    main.attr('style', 'display: block');
+    main.show()
     //display the question
     question.innerHTML = questions[questionSelector]['title']
     //display options
@@ -131,55 +131,82 @@ options.addEventListener('click', checkSelection)
 
 function checkSelection() {
     event.preventDefault();
-    message.removeClass('alert-success alert-danger')
-    message.attr('style', 'display: block');
-    
+    correct.hide()
+    wrong.hide()
+
     //if correct display question
     if (event.target.textContent === questions[questionSelector]['answer']) {
-        message.addClass('alert-success')
-        message.html('correct')
-        setTimeout(() => {
-            message.attr('style', 'display: none');
-        }, 1500);
-        
+        correct.html('Correct!')
+        correct.show()
+
     }
     //if wrong minus time display question
     else {
         timer.time -= 5
         //to show updated score immediately
         displayTime.html(timer.time);
-        message.addClass('alert-danger')
-        message.html('wrong')
-        setTimeout(() => {
-            message.attr('style', 'display: none');
-        }, 1500);
-        
+        wrong.html('Wrong!')
+        wrong.show()
+
     }
     questionSelector++
     //this if is to change the questions instantly upon click. counter does the same thing but only at 1000ms intervals - actually removed the one in counter, only evaluate length here (less double up)
-    if(questionSelector === questions.length){
+    if (questionSelector === questions.length) {
         clearInterval(counter);
         displayTime.html(timer.time);
         finalScore();
     } else {
-    displayQuestions();
+        displayQuestions();
     }
 }
 
 function finalScore() {
+    event.preventDefault();
+    //set user variable object values    
+    user.playerScore = timer.time
+    console.log(user.playerScore)
     //display final score
-    displayReset();
-    highScores.attr('style', 'display: block');
-    displayTime.attr('style', 'display: block');
-    submitButton.attr('style', 'display: block');
-    message.attr('style', 'display: block');
-    score.attr('style', 'display: block');
+    main.hide()
+    highScores.show()
+    displayTime.show()
+    submitButton.show()
+    score.show()
+    score.html('Final Score : ' + '<span id="score-span">' + timer.time + '</span>')
 
-    score.html('Final Score: ' + timer.time)
+    username.show()
 }
 
+submitButton.on('click', saveScore)
+
 function saveScore() {
-    //save user and score
+    //save user and score if no current score
+    user.player = $.trim(username.val())
+
+    if (user.player === "") {
+        correct.hide()
+        wrong.show()
+        wrong.html("Name cannot be blank!")
+        return;
+    } else {
+        //set user in local storage as highest scorer
+        localStorage.setItem("user", JSON.stringify(user))
+        score.hide()
+        username.hide()
+        submitButton.hide()
+        wrong.hide()
+        correct.show()
+        correct.html("Score saved!")
+        setTimeout(() => {
+            displayReset();
+            startQuiz();
+        }, 2000);
+    }
+
+    //check if no high score saved to local storage
+
+    //check if player score is higher than current high score
+
+    //else if lower then display didnt win
 }
 
 
@@ -188,9 +215,9 @@ highScores.on('click', displayScores);
 function displayScores() {
     clearInterval(counter);
     displayReset();
-    highScores.attr('style', 'display: none');
-    backButton.attr('style', 'display: block');
-    score.attr('style', 'display: block');
+    highScores.hide();
+    backButton.show()
+    score.show()
 
     score.html('Highest Score! : ')
 }
