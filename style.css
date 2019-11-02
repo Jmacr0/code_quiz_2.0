@@ -30,6 +30,6 @@
  }
  
 
- #correct, #wrong, #score {
+ #correct, #wrong, #score, #message {
     font-size: 2em;
  }
