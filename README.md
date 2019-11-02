@@ -1,12 +1,12 @@
-#Code Quiz
+# Code Quiz
 
 The is a quiz style game that asks the user a set of questions, displays multiple options, and awaits the user to select one
 
 It is a time based game that ends if one of two conditions are met:
 
-*The set times lapses to zero
+* The set times lapses to zero
 
-*The user answers all questions
+* The user answers all questions
 
 
 If the user answers all questions before the time lapses, then the remaining time is used as the users score.
