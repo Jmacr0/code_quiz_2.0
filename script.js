@@ -39,6 +39,7 @@ function displayReset() {
 }
 
 function startQuiz() {
+    displayReset();
     clearInterval(counter);
     questionSelector = 0;
     //display start quiz button
@@ -97,7 +98,7 @@ var timer = {
             clearInterval(counter);
             timer.time = 0;
             displayTime.html(timer.time);
-            finalScore();
+            noTime();
         } else {
             displayQuestions();
         }
@@ -116,14 +117,22 @@ var timer = {
 startButton.on('click', timer.start);
 
 function displayQuestions() {
-    main.show()
-    //display the question
-    question.innerHTML = questions[questionSelector]['title']
-    //display options
-    options.children[0].innerHTML = questions[questionSelector]['choices'][0]
-    options.children[1].innerHTML = questions[questionSelector]['choices'][1]
-    options.children[2].innerHTML = questions[questionSelector]['choices'][2]
-    options.children[3].innerHTML = questions[questionSelector]['choices'][3]
+    console.log(questionSelector)
+    console.log(questions.length)
+    if (questionSelector === questions.length) {
+        clearInterval(counter);
+        displayTime.html(timer.time);            
+        finalScore();
+    } else {
+        main.show()
+        //display the question
+        question.innerHTML = questions[questionSelector]['title']
+        //display options
+        options.children[0].innerHTML = questions[questionSelector]['choices'][0]
+        options.children[1].innerHTML = questions[questionSelector]['choices'][1]
+        options.children[2].innerHTML = questions[questionSelector]['choices'][2]
+        options.children[3].innerHTML = questions[questionSelector]['choices'][3]
+    }
 }
 
 
@@ -132,36 +141,65 @@ options.addEventListener('click', checkSelection)
 function checkSelection() {
     event.preventDefault();
     correct.hide()
-    wrong.hide()
+    wrong.hide()   
+
 
     //if correct display question
     if (event.target.textContent === questions[questionSelector]['answer']) {
         correct.html('Correct!')
         correct.show()
-
+        questionSelector++
+        displayQuestions()
     }
     //if wrong minus time display question
-    else {
+    else if (event.target.textContent !== questions[questionSelector]['answer']) {
         timer.time -= 5
         //to show updated score immediately
         displayTime.html(timer.time);
-        wrong.html('Wrong!')
-        wrong.show()
+
+        //instantly change to no time message
+        if (timer.time < 0) {
+            clearInterval(counter)
+            wrong.html('Wrong!')
+            wrong.show()
+            setTimeout(() => {
+                wrong.hide()
+            }, 2000);
+            noTime();
+
+        } else {
+            //to show updated score immediately
+            wrong.html('Wrong!')
+            wrong.show()
+
+        }
+        questionSelector++
+        displayQuestions();
 
     }
-    questionSelector++
+
     //this if is to change the questions instantly upon click. counter does the same thing but only at 1000ms intervals - actually removed the one in counter, only evaluate length here (less double up)
-    if (questionSelector === questions.length) {
-        clearInterval(counter);
-        displayTime.html(timer.time);
-        finalScore();
-    } else {
-        displayQuestions();
-    }
+
 }
 
+function noTime() {
+    displayReset();
+    wrong.html('Ran Out of Time!')
+    wrong.show()
+    timer.time = 0
+    displayTime.html(timer.time)
+    finalScore();
+}
+
+
 function finalScore() {
-    event.preventDefault();
+    //if final question correct, hide after 2 seconds
+    setTimeout(() => {
+        correct.hide()
+    }, 2000);
+    setTimeout(() => {
+        wrong.hide()
+    }, 2000);
     //set user variable object values    
     user.playerScore = timer.time
     console.log(user.playerScore)
@@ -169,16 +207,28 @@ function finalScore() {
     main.hide()
     highScores.show()
     displayTime.show()
-    submitButton.show()
-    score.show()
-    score.html('Final Score : ' + '<span id="score-span">' + timer.time + '</span>')
-
-    username.show()
+    if (JSON.parse(localStorage.getItem('user')) === null || user.playerScore > JSON.parse(localStorage.getItem('user')).playerScore) {
+        //show username input and submit button
+        submitButton.show()
+        username.show()
+        score.show()
+        score.html('Final Score : ' + '<span id="score-span">' + timer.time + '</span>')
+    }
+    else if (user.playerScore < JSON.parse(localStorage.getItem('user')).playerScore) {
+        wrong.show()
+        setTimeout(() => {
+            wrong.html('Sorry you have not beaten the High-Score')
+        }, 1500);
+        setTimeout(() => {
+            startQuiz();
+        }, 3000);
+    }
 }
 
 submitButton.on('click', saveScore)
 
 function saveScore() {
+    event.preventDefault();
     //save user and score if no current score
     user.player = $.trim(username.val())
 
@@ -219,7 +269,7 @@ function displayScores() {
     backButton.show()
     score.show()
 
-    score.html('Highest Score! : ')
+    score.html(JSON.parse(localStorage.getItem('user')).player + ' : ' + JSON.parse(localStorage.getItem('user')).playerScore)
 }
 
 
