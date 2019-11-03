@@ -64,7 +64,7 @@ var questions = [
     },
     {
         title: "The condition in an if / else statement is enclosed within ____.",
-        choices: ["quotes", "curly brackets", "parentheses", "square brackets"],
+        choices: ["parentheses", "curly brackets", "quotes", "square brackets"],
         answer: "parentheses"
     },
     {
@@ -76,6 +76,26 @@ var questions = [
         title: "An array variable is enclosed within ____.",
         choices: ["quotes", "curly brackets", "parentheses", "square brackets"],
         answer: "square brackets"
+    },
+    {
+        title: "CSS selectors DO NOT include:",
+        choices: ["arrays", "ID", "class", "element"],
+        answer: "arrays"
+    },
+    {
+        title: "A function block is enclosed within ____.",
+        choices: ["quotes", "curly brackets", "parentheses", "square brackets"],
+        answer: "curly brackets"
+    },
+    {
+        title: "A string data type is created within ____.",
+        choices: ["quotes", "curly brackets", "parentheses", "square brackets"],
+        answer: "quotes"
+    },
+    {
+        title: "Javscript is a ____.",
+        choices: ["markdown language", "cascading style sheet", "markup language", "programming language"],
+        answer: "programming language"
     },
     ///etc.
 ];
