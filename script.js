@@ -18,7 +18,6 @@ var options = document.querySelector('#options').children[0]
 var user = {
     player: $.trim(username.val()),
     playerScore: parseInt(scoreSpan.html()),
-
 };
 
 //start the quiz
@@ -177,14 +176,11 @@ function checkSelection() {
             //if wrong but still have time remaining then display wrong message
             wrong.html('Wrong!')
             wrong.show()
-
         }
         //increment questionSelector and then display question to show the next question
         questionSelector++
         displayQuestions();
-
     }
-
 }
 
 //function called if no time remaining
@@ -223,10 +219,15 @@ function finalScore() {
         score.html('Final Score : ' + '<span id="score-span">' + timer.time + '</span>')
     }
     //if player did not beat the localStorage store (current high score), then only display message and call startQuiz afterwards
-    else if (user.playerScore < JSON.parse(localStorage.getItem('user')).playerScore) {
+    else {
+        if (user.playerScore < JSON.parse(localStorage.getItem('user')).playerScore) {
+            message.html('Sorry you did not beat the High-Score!')
+        }
+        else if (user.playerScore === JSON.parse(localStorage.getItem('user')).playerScore) {
+            message.html('You tied with the High-Score!')
+        }
         setTimeout(() => {
             message.show()
-            message.html('Sorry you have not beaten the High-Score')
         }, 2000);
         setTimeout(() => {
             startQuiz();
@@ -277,7 +278,6 @@ function displayScores() {
     highScores.hide();
     backButton.show()
     score.show()
-
     score.html(JSON.parse(localStorage.getItem('user')).player + ' : ' + JSON.parse(localStorage.getItem('user')).playerScore)
 }
 
